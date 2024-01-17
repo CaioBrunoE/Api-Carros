@@ -5,7 +5,6 @@ import com.example.carros.domain.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,6 +33,13 @@ public class CarrosController {
      Carro c =  service.save(carro);
 
       return "Carro salvo comsucesso " + c.getId();
+    }
+
+    @PutMapping("/{id}")
+    public  String putCarro(@PathVariable("id") Long id , @RequestBody Carro carro){
+        Carro c = service.update(id, carro);
+
+        return "Carro atualizado com sucesso " + c.getNome();
     }
 
 }

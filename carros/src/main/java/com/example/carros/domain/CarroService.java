@@ -41,4 +41,20 @@ public class CarroService {
        return repository.save(carro);
     }
 
+    public Carro update(Long id, Carro carro) {
+        Optional<Carro> c = repository.findById(id);
+         if (c.isPresent()){
+             Carro newCarro = c.get();
+             newCarro.setNome(carro.getNome());
+             newCarro.setTipo(carro.getTipo());
+             System.out.println("Carro id :" + newCarro.getId());
+
+             repository.save(newCarro);
+
+             return  newCarro;
+    }else {
+             throw  new RuntimeException("Não foi possivel atualizar o rsgistro");
+         }
+
+    }
 }
