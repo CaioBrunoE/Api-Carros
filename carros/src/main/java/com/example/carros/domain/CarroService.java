@@ -57,4 +57,17 @@ public class CarroService {
          }
 
     }
+
+    public void delete(Long id) {
+
+        Optional<Carro> dlCarro = repository.findById(id);
+
+        if (dlCarro.isPresent()){
+            repository.deleteById(id);
+        }else{
+            throw new RuntimeException("Este carro nao exite");
+        }
+
+
+    }
 }

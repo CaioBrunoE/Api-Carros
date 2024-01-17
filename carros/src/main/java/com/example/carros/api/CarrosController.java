@@ -42,4 +42,11 @@ public class CarrosController {
         return "Carro atualizado com sucesso " + c.getNome();
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteCarro(@PathVariable("id") Long id){
+        service.delete(id);
+
+        return "Carro deletado com sucesso" ;
+    }
+
 }
