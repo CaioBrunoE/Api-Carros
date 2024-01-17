@@ -33,7 +33,7 @@ public class CarroService {
 
     }
 
-    public Iterable<Carro> getByTipo(String tipo) {
+    public List<Carro> getByTipo(String tipo) {
         return repository.getByTipo(tipo);
     }
 
@@ -67,7 +67,6 @@ public class CarroService {
         }else{
             throw new RuntimeException("Este carro nao exite");
         }
-
 
     }
 }
