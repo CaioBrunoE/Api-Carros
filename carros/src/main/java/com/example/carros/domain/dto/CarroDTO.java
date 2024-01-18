@@ -1,8 +1,9 @@
 package com.example.carros.domain.dto;
 
 import com.example.carros.domain.Carro;
-import jakarta.persistence.Column;
-import lombok.Data;
+
+import lombok.*;
+import org.modelmapper.ModelMapper;
 
 @Data
 public class CarroDTO {
@@ -13,10 +14,16 @@ public class CarroDTO {
 
     private String tipo;
 
-    public CarroDTO(Carro carroOBJ){
+   /* public CarroDTO(Carro carroOBJ){
 
         this.id=carroOBJ.getId();
         this.nome=carroOBJ.getNome();
         this.tipo=carroOBJ.getTipo();
+    }*/
+
+    public  static CarroDTO createDTO(Carro carro){
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(carro,CarroDTO.class);
+
     }
 }

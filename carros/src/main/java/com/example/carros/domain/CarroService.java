@@ -17,16 +17,17 @@ public class CarroService {
    private CarroRepository repository;
 
     public List<CarroDTO> getCarros(){
+
         List<Carro> carros = repository.findAll();
 
-   List<CarroDTO> list = carros.stream().map(c-> new CarroDTO(c)).collect(Collectors.toList());
+   List<CarroDTO> list = carros.stream().map(c-> CarroDTO.createDTO(c)).collect(Collectors.toList());
 
         return list ;
     }
 
     public Optional<CarroDTO> getCarroById(Long id) {
 
-        return repository.findById(id).map(CarroDTO::new);
+        return repository.findById(id).map(CarroDTO::createDTO);
 
       /*  Optional<Carro> carro = repository.findById(id);
 
@@ -42,7 +43,7 @@ public class CarroService {
     public List<CarroDTO> getByTipo(String tipo) {
 
         List<Carro> carros =  repository.getByTipo(tipo);
-        List<CarroDTO> list = carros.stream().map(CarroDTO::new).collect(Collectors.toList());
+        List<CarroDTO> list = carros.stream().map(CarroDTO::createDTO).collect(Collectors.toList());
 
         return list;
     }
