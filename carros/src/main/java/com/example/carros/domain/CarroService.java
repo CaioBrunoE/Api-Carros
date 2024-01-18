@@ -4,6 +4,7 @@ package com.example.carros.domain;
 import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,36 +49,38 @@ public class CarroService {
         return list;
     }
 
-    public Carro save(Carro carro){
-       return repository.save(carro);
+    public CarroDTO insert(Carro carro){
+        Assert.isNull(carro.getId(),"Não foi possivel inserir o registro");
+
+        return CarroDTO.createDTO(repository.save(carro));
     }
 
-    public Carro update(Long id, Carro carro) {
-        Optional<Carro> c = repository.findById(id);
-         if (c.isPresent()){
-             Carro newCarro = c.get();
+    public CarroDTO update(Long id, Carro carro) {
+        Optional<Carro> optional = repository.findById(id);
+
+         if (optional.isPresent()){
+             Carro newCarro = optional.get();
              newCarro.setNome(carro.getNome());
              newCarro.setTipo(carro.getTipo());
              System.out.println("Carro id :" + newCarro.getId());
 
              repository.save(newCarro);
 
-             return  newCarro;
+             return  CarroDTO.createDTO(newCarro);
+
     }else {
-             throw  new RuntimeException("Não foi possivel atualizar o rsgistro");
+             return null ;
+            // throw  new RuntimeException("Não foi possivel atualizar o rsgistro");
          }
 
     }
 
-    public void delete(Long id) {
-
-        Optional<Carro> dlCarro = repository.findById(id);
-
-        if (dlCarro.isPresent()){
+    public boolean delete(Long id) {
+        if (getCarroById(id).isPresent()){
             repository.deleteById(id);
-        }else{
-            throw new RuntimeException("Este carro nao exite");
+            return true;
         }
+        return false;
 
     }
 }

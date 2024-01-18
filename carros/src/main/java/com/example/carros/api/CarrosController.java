@@ -6,7 +6,9 @@ import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,23 +53,44 @@ public class CarrosController {
 
     }
     @PostMapping
-    public String  postCarro(@RequestBody Carro carro){
-        Carro c =  service.save(carro);
-      return "Carro salvo comsucesso " + c.getId();
+    public ResponseEntity  postCarro(@RequestBody Carro carro){
+        try {
+            CarroDTO c = service.insert(carro);
+
+            URI location = getURI(c.getId());
+            return ResponseEntity.created(location).build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private URI getURI(Long id){
+        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(id).toUri();
     }
 
     @PutMapping("/{id}")
-    public  String putCarro(@PathVariable("id") Long id , @RequestBody Carro carro){
-        Carro c = service.update(id, carro);
+    public  ResponseEntity putCarro(@PathVariable("id") Long id , @RequestBody Carro carro){
+        carro.setId(id);
 
-        return "Carro atualizado com sucesso " + c.getNome();
+        CarroDTO c = service.update(id, carro);
+
+        return  c != null ?
+                ResponseEntity.ok().build():
+                ResponseEntity.notFound().build();
+
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCarro(@PathVariable("id") Long id){
-        service.delete(id);
+    public ResponseEntity deleteCarro(@PathVariable("id") Long id){
 
-        return "Carro deletado com sucesso" ;
+        boolean ok = service.delete(id);
+
+        return  ok ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.notFound().build();
+
+
     }
 
 }
