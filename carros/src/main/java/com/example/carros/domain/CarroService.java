@@ -1,12 +1,14 @@
 package com.example.carros.domain;
 
 
+import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarroService {
@@ -14,17 +16,35 @@ public class CarroService {
     @Autowired
    private CarroRepository repository;
 
-    public Iterable<Carro> getCarros(){
-      return  repository.findAll();
+    public List<CarroDTO> getCarros(){
+        List<Carro> carros = repository.findAll();
+
+   List<CarroDTO> list = carros.stream().map(c-> new CarroDTO(c)).collect(Collectors.toList());
+
+        return list ;
     }
 
-    public Optional<Carro> getCarroById(Long id) {
-        return repository.findById(id);
+    public Optional<CarroDTO> getCarroById(Long id) {
+
+        return repository.findById(id).map(CarroDTO::new);
+
+      /*  Optional<Carro> carro = repository.findById(id);
+
+        if (carro.isPresent()){
+            return Optional.of(new CarroDTO(carro.get()));
+        }else {
+            return null;
+        }*/
+
 
     }
 
-    public List<Carro> getByTipo(String tipo) {
-        return repository.getByTipo(tipo);
+    public List<CarroDTO> getByTipo(String tipo) {
+
+        List<Carro> carros =  repository.getByTipo(tipo);
+        List<CarroDTO> list = carros.stream().map(CarroDTO::new).collect(Collectors.toList());
+
+        return list;
     }
 
     public Carro save(Carro carro){
