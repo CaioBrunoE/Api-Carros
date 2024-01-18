@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class CarrosApplicationTests {
     @Autowired
 	private CarroService service;
 	@Test
-	void testeSave() {
+	void testSave() {
 		Carro carro = new Carro();
 		carro.setNome("Ferrari");
 		carro.setTipo("esportivo");
@@ -44,14 +45,25 @@ class CarrosApplicationTests {
 		//Verificar se foi deletado
 		assertFalse(service.getCarroById(id).isPresent());
 
+	}
 
+	@Test
+	void testLista() {
+		List<CarroDTO> carros = service.getCarros();
+
+		assertEquals(30, carros.size());
 
 	}
 
 	@Test
-	void contextLoads() {
+	void testGet() {
+		Optional<CarroDTO> op = service.getCarroById(11L);
 
+		assertTrue(op.isPresent());
 
+		CarroDTO c = op.get();
+
+		assertEquals("Ferrari FF", c.getNome());
 	}
 
 }

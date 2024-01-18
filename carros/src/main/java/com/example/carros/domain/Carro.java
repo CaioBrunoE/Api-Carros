@@ -9,10 +9,12 @@ public class Carro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="nome")
     private String nome;
-    @Column(name = "tipo")
     private String tipo;
-
+    private String descricao;
+    private String urlFoto;
+    private String urlVideo;
+    private String latitude;
+    private String longitude;
 
 }
